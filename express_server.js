@@ -24,6 +24,7 @@ const generateRandomString = () => {
 const urlDatabase = {
   b2xVn2: "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com",
+  
 };
 
 app.listen(PORT, () => {
@@ -61,5 +62,15 @@ app.get("/urls/:shortURL", (req, res) => {
 
 app.post("/urls", (req, res) => {
   console.log(req.res);
-  res.send("Ok");
+  const shortURL = generateRandomString();
+  urlDatabase[shortURL] = req.params.longURL;
+  res.redirect(`/urls/${shortURL}`);
 });
+
+
+
+
+
+
+
+
