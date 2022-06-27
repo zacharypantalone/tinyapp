@@ -6,6 +6,7 @@ const PORT = 8080;
 
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 const generateRandomString = () => {
   let characters = 'abcdefghijklmnopqrstuvwxyz';
@@ -13,14 +14,16 @@ const generateRandomString = () => {
   
   for (let i = 0; i < characters.length; i++) {
     string += characters.charAt(Math.floor(Math.random() * characters.length));
-    
   }
-
   return string.slice(0, 8);
 };
 
-
-
+const templateVars = {
+  username: req.cookies["username"],
+  // ... any other vars
+};
+res.render("urls_index", templateVars);
+    
 const urlDatabase = {
   b2xVn2: "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com",
@@ -87,7 +90,15 @@ app.post("/urls/:shortURL", (req, res) => {
   res.redirect("/urls");
 });
 
-app.post();
+app.post("/login", (req, res) => {
+  res.cookie("username", req.body.username);
+  res.redirect("/urls");
+});
+
+
+
+
+  
   
   
 
