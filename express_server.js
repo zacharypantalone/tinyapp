@@ -23,9 +23,20 @@ const generateRandomString = () => {
 const urlDatabase = {
   b2xVn2: "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com",
-  
 };
-
+  
+//\/\/\/THIS IS ONLY STARTER CODE\/\/\/////////
+const users = {
+  "userRandomID":
+  {id: "userRandomID",
+    email: "user@example.com",
+    password: "purple-monkey-dinosaur"},
+  "user2RandomID":
+  {id: "user2RandomID",
+    email: "user2@example.com",
+    password: "dishwasher-funk"}
+};
+//^^^THIS IS ONLY STARTER CODE^^^////////
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
@@ -110,17 +121,19 @@ app.post("/logout", (req, res) => {
   res.redirect("/urls");
 });
 
+app.post("/register", (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
 
-
-
+  const newID = generateRandomString();
   
-  
-  
+  users[newID] = {
+    id: newID,
+    email: email,
+    password: password
+  };
+  console.log(users);
+  res.cookie('userID', newID);
+  res.redirect('/urls');
 
-  
-
-
-
-
-
-
+});
