@@ -45,29 +45,33 @@ app.get("/", (req, res) => {
   res.send("Hello!");
 });
 
-app.get("/urls.json", (req, res) => {
-  res.json(urlDatabase);
-});
 
-app.get("/hello", (req, res) => {
-  res.send("<html><body>Hello <b>World</b></body></html>\n");
-});
+
 
 app.get("/urls", (req, res) => {
-  const templateVars = { urls: urlDatabase, username: req.cookies["username"] };
+  const userID = req.cookies.userID;
+  
+  // if (!userID) {
+  //   res.send('not logged in!');
+  //   return;
+  // }
+  const user = users[userID];
+  console.log(req.cookies);
+  const templateVars = { urls: urlDatabase, user };
   res.render("urls_index", templateVars);
 });
 
 app.get("/urls/new", (req, res) => {
-  const templateVars = { username: req.cookies["username"] };
+  const templateVars = { user: users[req.cookies["userID"]] };
   res.render("urls_new", templateVars);
 });
 
 
-app.get("/urls/register", (req, res) => {
-  const templateVars = { username: req.cookies["username"] };
+app.get("/register", (req, res) => {
   
-  res.render("urls_register", templateVars);
+  const templateVars = { user: null };
+  
+  res.render("register", templateVars);
 });
 
 app.get("/urls/:shortURL", (req, res) => {
@@ -76,7 +80,7 @@ app.get("/urls/:shortURL", (req, res) => {
   const templateVars = {
     shortURL,
     longURL,
-    username: req.cookies["username"]
+    user: users[req.cookies["userID"]]
   };
   res.render("urls_show", templateVars);
 });
@@ -112,12 +116,11 @@ app.post("/urls/:shortURL", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  res.cookie("username", req.body.username);
-  res.redirect("/urls");
+
 });
 
 app.post("/logout", (req, res) => {
-  res.clearCookie("username", req.body.username);
+  res.clearCookie("userID");
   res.redirect("/urls");
 });
 
@@ -125,15 +128,27 @@ app.post("/register", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
 
-  const newID = generateRandomString();
+  const id = generateRandomString();
   
-  users[newID] = {
-    id: newID,
-    email: email,
-    password: password
-  };
-  console.log(users);
-  res.cookie('userID', newID);
-  res.redirect('/urls');
+  users[id] = { id, email, password };
 
+
+  if (!email || !password) {
+    res.status(400).send('Error code 400');
+    
+  }
+
+  if (users[email]) {
+    res.status(400).send('user already exists');
+    
+  }
+  
+  res.cookie('userID', id);
+  res.redirect('/urls');
+ 
 });
+  
+
+  
+  
+
