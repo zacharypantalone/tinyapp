@@ -1,6 +1,9 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser');
+const bcrypt = require("bcryptjs");
+// const password = "purple-monkey-dinosaur";
+// const hashedPassword = bcrypt.hashSync(password, 10);
 const app = express();
 const PORT = 8080;
 
@@ -168,7 +171,7 @@ app.post("/login", (req, res) => {
     return;
   }
 
-  if (users[id].password !== password) {
+  if (!bcrypt.compareSync(password, users[id].password)) {
     res.status(403).send("Invalid password.");
     return;
   }
@@ -198,7 +201,7 @@ app.post("/register", (req, res) => {
   }
   
   const id = generateRandomString();
-  users[id] = { id, email, password };
+  users[id] = { id, email, password: bcrypt.hashSync(password, 10) };
   
   res.cookie('userID', id);
   res.redirect('/urls');

@@ -1,10 +1,9 @@
 {
   "name": "tinyapp",
   "version": "1.0.0",
-  "description": "",
   "main": "express_server.js",
   "scripts": {
-    "start": "./node_modules/.bin/nodemon -L express_server.js",
+    "start": "nodemon -L express_server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,6 +18,7 @@
   },
   "homepage": "https://github.com/zacharypantalone/tinyapp#readme",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.0",
     "cookie-parser": "^1.4.6",
     "ejs": "^3.1.8",
@@ -26,5 +26,6 @@
   },
   "devDependencies": {
     "nodemon": "^1.19.4"
-  }
+  },
+  "description": ""
 }
