@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cookieSession = require('cookie-session');
 const bcrypt = require("bcryptjs");
+const emailLookup = require('./helpers.js');
 // const password = "purple-monkey-dinosaur";
 // const hashedPassword = bcrypt.hashSync(password, 10);
 const app = express();
@@ -46,13 +47,7 @@ const urlDatabase = {
 };
 
 ///////// HELPER FUNCTIONS///////////////////////////
-const emailLookup = (object, email) => {
-  for (const id in object) {
-    if (object[id].email === email) {
-      return id;
-    }
-  }
-};
+
 
 const urlsFilter = (userID) => {
   const newObject = {};
