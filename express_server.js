@@ -167,6 +167,11 @@ app.post("/login", (req, res) => {
   const password = req.body.password;
   const id = emailLookup(users, email);
 
+  if (!email || !password) {
+    res.status(400).send('Error code 400');
+    return;
+  }
+
   if (!id) {
     res.status(403).send('Account does not exist.');
     return;
