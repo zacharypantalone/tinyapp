@@ -3,12 +3,14 @@ const bodyParser = require("body-parser");
 const cookieSession = require('cookie-session');
 const bcrypt = require("bcryptjs");
 const emailLookup = require('./helpers.js');
+const methodOverride = require('method-override');
 // const password = "purple-monkey-dinosaur";
 // const hashedPassword = bcrypt.hashSync(password, 10);
 const app = express();
 const PORT = 8080;
 
 app.set("view engine", "ejs");
+app.use(methodOverride('_method'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieSession({
   name: 'session',
@@ -149,12 +151,12 @@ app.post("/urls", (req, res) => {
 });
 
 
-app.post("/urls/:shortURL/delete", (req, res) => {
+app.delete("/urls/:shortURL", (req, res) => {
   delete urlDatabase[req.params.shortURL];
   res.redirect("/urls");
 });
 
-app.post("/urls/:shortURL", (req, res) => {
+app.put("/urls/:shortURL", (req, res) => {
   const shortURL = req.params.shortURL;
   const longURL = req.body.longURL;
 
